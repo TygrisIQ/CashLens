@@ -1,31 +1,38 @@
-import { View } from "react-native/types_generated/index";
+import { View, Text, Button, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Text, Button, StyleSheet } from "react-native";
+import ExpensesCard from '../components/expenses-card';
 
 
 export default function HomeScreen() {
-
-    const nav = useNavigation();
+    const navigation = useNavigation();
 
     return (
-        <View>
-            <Text>Home Screen</Text>
+        <View style={styles.container}>
             <Button 
                 title="Go to Budget"
-                onPress={() => nav.navigate('Budget')}
+                onPress={() => navigation.navigate('Budget')}
             />
+            <ExpensesCard />
+            <ExpensesCard />
+            <ExpensesCard />
+
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    sectionContainer: {
-      marginTop: 32,
-        paddingHorizontal: 24,
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
     },
-
-    Button: {
+    button: {
         marginTop: 20,
         width: '50%',
-        alignSelf: 'flex-start',
-    },});
+        alignSelf: 'center',
+    },
+    ExpensesCard: {
+        marginTop: 20,
+    },
+});
