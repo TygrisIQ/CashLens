@@ -1,57 +1,81 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, SafeAreaView } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native/types_generated/index';
+import { SafeAreaView, StyleSheet, Dimensions, Text, View, TouchableWithoutFeedback } from 'react-native';
+import moment from 'moment';
+import Swiper from 'react-native-swiper';
+
+const { width } = Dimensions.get('screen');
 
 export default function Calendar() {
-  const dates = 
-  [
-    { weekday: 'Sun', date: newDate()},
-    { weekday: 'Mon', date: newDate()},
-    { weekday: 'Tue', date: newDate()},
-    { weekday: 'Wed', date: newDate()},
-    { weekday: 'Thu', date: newDate()},
-    { weekday: 'Fri', date: newDate()},
-    { weekday: 'Sat', date: newDate()},
-    ];
 
+  const swiper = React.useRef();
+  const [value, setValue] = React.useState(new Date());
+  const [week, setWeek] = React.useState(0);
 
-  const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-  const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+  const weeks = React.useMemo(() => {
+    const start = moment(start).add(week, 'week').startOf('week');
 
-  const daysInMonth = eachDayOfInterval({
-    start: firstDayOfMonth,
-    end: lastDayOfMonth,
-  });
+    return [-1, 0, 1].map(adj => {
+      return Array.from({ length: 7 }).map((_, index) => {
+        const date = moment(start).add(adj, 'week').add(index, 'day');
 
-  const startingDayIndex = firstDayOfMonth.getDay();
+        return {
+          weekday: date.format('ddd'),
+          date: date.toDate(),
+        };
+      });
+    });
+  }, [week]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style= {{flex: 1}}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>{format(currentDate, 'MMMM yyyy')}</Text>
+          <Text style={styles.title}>Your Schedule</Text>
         </View>
 
         <View style={styles.picker}>
-          {dates.map((day) => (
-              <TouchableWithoutFeedback>
-                  <View key={day.weekday} style={styles.day}>
-                      <Text>{day.weekday}</Text>
-                  </View>
-            </TouchableWithoutFeedback>
-          ))}
-        </View>
+          <Swiper index={1} ref={swiper} showsPagination={false} loop={false} onIndexChanged={ind => {
+            if (ind === 1) {
+              return;
+            }
+            setTimeout(() => {
+              const newIndex = ind - 1;
+              const newWeek = week + newIndex;
+              setWeek(newWeek);
+            }, 100);
+          }}>
+            {weeks.map((dates, index) => (
+              <View style={styles.itemRow} key={index}>
+                {dates.map((item, dateIndex) => {
+                  const isActive = value.toDateString() === item.date.toDateString();
 
-        <View style={styles.daysGrid}>
-          {Array.from({ length: startingDayIndex }).map((_, index) => (
-            <View key={`empty-${index}`} style={styles.day} />
-          ))}
-
-          {daysInMonth.map((day, index) => (
-            <View key={index} style={styles.day}>
-              <Text>{format(day, 'd')}</Text>
-            </View>
-          ))}
+                  return (
+                    <TouchableWithoutFeedback key={dateIndex} onPress={() => setValue(item.date)}>
+                      <View 
+                        style={{
+                          ...styles.item,
+                          ...(isActive && {backgroundColor: '#0f0095ff', borderColor: '#0f0095ff'})
+                        }}>
+                        <Text 
+                          style={{
+                            ...styles.itemWeekday,
+                            ...(isActive && {color: 'white'})
+                          }}>{item.weekday}
+                          </Text>
+                        <Text 
+                          style={{
+                            ...styles.itemDate,
+                            ...(isActive && {color: 'white'})
+                          }}>
+                            {item.date.getDate()}
+                        </Text>
+                      </View>
+                    </TouchableWithoutFeedback> 
+                  );
+                })}
+              </View>
+            ))}
+          </Swiper>
         </View>
       </View>
     </SafeAreaView>
@@ -63,20 +87,50 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 16,
   },
+  picker: {
+    flex: 1, 
+    alignItems: 'center', 
+    justifyContent: 'row',
+    paddingVertical: 12,
+    maxHeight: 74,
+  },
   header: {
     paddingHorizontal: 16,
   },
   title: {
-    fontsize: 32,
+    fontSize: 32,
     fontWeight: 'bold',
     color: '#1d1d1d',
     marginBottom: 12,
   },
   itemRow: {
-    width,
+    width: 400,
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     marginHorizontal: -4,
+  },
+  item: {
+    flex: 1,
+    height: 50,
+    marginHorizontal: 4,
+    alignItems: 'center',
+    borderRadius: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+    borderWidth: 1,
+    borderColor: '#e3e3e3',
+    flexDirection: 'column',
+  },
+  itemWeekday: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#737373',
+    marginBottom: 4,
+  },
+  itemDate: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#737373',
   },
 });

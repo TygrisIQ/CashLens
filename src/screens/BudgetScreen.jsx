@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import MyCalendar from '../components/calendar';
+import Calendar from '../components/calendar';
 
 
 export default function BudgetScreen() {
@@ -9,7 +9,7 @@ export default function BudgetScreen() {
 
     return (
         <View>
-            <MyCalendar />
+            <Calendar />
             <Button 
                 style={styles.button}
                 title="Go to Expenses" 
