@@ -15,14 +15,8 @@ export default function BudgetScreen() {
   const [desc, setDesc] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("income");
-
-  const income = transactions
-    .filter((t) => t.type === "income")
-    .reduce((a, b) => a + b.amount, 0);
-
-  const expenses = transactions
-    .filter((t) => t.type === "expense")
-    .reduce((a, b) => a + b.amount, 0);
+  const [income, setIncome] = useState(0);
+  const [expenses, setExpenses] = useState(0);
 
   const balance = income - expenses;
 
@@ -39,6 +33,11 @@ export default function BudgetScreen() {
     setTransactions([newTx, ...transactions]);
     setDesc("");
     setAmount("");
+    if (type === "income") {
+      setIncome(income + newTx.amount);
+    } else {
+      setExpenses(expenses + newTx.amount);
+    }
   };
 
   return (
