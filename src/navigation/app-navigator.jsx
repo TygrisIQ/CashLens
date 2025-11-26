@@ -10,7 +10,7 @@ export default function AppNavigator() {
         <Stack.Navigator screenOptions={{headerShown: false}}>
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Budget" component={BudgetScreen} />
-            <Stack.Screen name="Profile" component={ProfileScreen}/>
+            <Stack.Screen name="Profile" component={ProfileScreen} />
         </Stack.Navigator>
     );
 }

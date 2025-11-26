@@ -11,7 +11,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeScreen from './src/screens/HomeScreens';
 import BudgetScreen from './src/screens/BudgetScreen';
-
+import ProfileScreen from './src/screens/ProfileScreen';
 const Stack = createNativeStackNavigator();
 
 function App() {
@@ -37,6 +37,13 @@ function App() {
             options={{
               title: 'Budget',
             }}
+          />
+          <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            title: "Profile",
+          }}
           />
         </Stack.Navigator>
       </NavigationContainer>
