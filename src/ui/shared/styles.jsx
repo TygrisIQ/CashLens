@@ -102,4 +102,26 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "#eee",
   },
+   navBar: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: "center",
+        padding: 12,
+        backgroundColor: '#f5f5f5',
+        borderRadius: 10,
+        width: "100%",
+        marginBottom: 25,
+    },
+    link: {
+        fontSize: 18,
+        color: '#007AFF',
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        borderRadius: 15,
+    },
+    activeLink: {
+        fontWeight: 'bold',
+        backgroundColor: '#e0e0e0',
+        color: '#000',
+    },
 });
