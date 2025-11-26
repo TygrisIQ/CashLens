@@ -17,11 +17,11 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 40,
     },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
+     title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
     subtitle: {
         fontSize: 16,
         color: '#666',

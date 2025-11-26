@@ -12,6 +12,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeScreen from './src/screens/HomeScreens';
 import BudgetScreen from './src/screens/BudgetScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import { styles } from './src/ui/shared/styles';
+
 const Stack = createNativeStackNavigator();
 
 function App() {
@@ -35,14 +37,16 @@ function App() {
             name="Budget" 
             component={BudgetScreen}
             options={{
-              title: 'Budget',
+              title: 'CashLens',
+              headerTitleStyle: styles.title
             }}
           />
           <Stack.Screen
           name="Profile"
           component={ProfileScreen}
           options={{
-            title: "Profile",
+            title: "CashLens",
+            headerTitleStyle: styles.title
           }}
           />
         </Stack.Navigator>
@@ -51,13 +55,6 @@ function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    backgroundColor: '#0f0095ff',
-  }
-});
+
 
 export default App;
