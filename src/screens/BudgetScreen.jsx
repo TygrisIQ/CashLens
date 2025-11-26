@@ -10,6 +10,7 @@ import {
 
 import NavBar from "../components/nav-bar";
 
+import {styles} from "../ui/shared/styles";
 export default function BudgetScreen() {
   const [transactions, setTransactions] = useState([]);
   const [desc, setDesc] = useState("");
@@ -125,72 +126,4 @@ export default function BudgetScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { backgroundColor: "#f4f6f8", flex: 1 },
-  card: {
-    margin: 20,
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 12,
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-  },
-  heading: {
-    color: "#0d6efd",
-    textAlign: "center",
-    fontSize: 22,
-    marginBottom: 20,
-  },
-  balance: { fontSize: 18, textAlign: "center" },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginVertical: 20,
-  },
-  label: { color: "#777", textAlign: "center" },
-  income: { color: "green", fontSize: 20, textAlign: "center" },
-  expenses: { color: "red", fontSize: 20, textAlign: "center" },
-  form: { marginBottom: 20 },
-  input: {
-    backgroundColor: "#eee",
-    padding: 12,
-    borderRadius: 8,
-    marginVertical: 6,
-  },
-  typeRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 10,
-  },
-  typeButton: {
-    flex: 1,
-    backgroundColor: "#ccc",
-    padding: 12,
-    borderRadius: 8,
-    marginHorizontal: 4,
-  },
-  activeType: {
-    backgroundColor: "#0d6efd",
-  },
-  typeText: { color: "white", textAlign: "center" },
-  addBtn: {
-    backgroundColor: "navy",
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 6,
-  },
-  addText: { color: "white", textAlign: "center", fontSize: 16 },
-  txTitle: { fontSize: 18, color: "#555", marginTop: 10 },
-  empty: {
-    textAlign: "center",
-    color: "#888",
-    marginVertical: 20,
-  },
-  txItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderColor: "#eee",
-  },
-});
+

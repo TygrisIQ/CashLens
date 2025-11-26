@@ -4,7 +4,7 @@ import NavBar from '../components/nav-bar';
 import ProgressBar from '../components/progress-bar';
 import SummaryCard from '../components/summary-card';
 import ActionButton from '../components/action-button';
-
+import {styles} from '../ui/shared/styles';
 
 export default function HomeScreen() {
 
@@ -44,40 +44,3 @@ export default function HomeScreen() {
         </ScrollView>
     );
 }
-
-const styles = StyleSheet.create({
-    scrollView: {
-        flex: 1,
-        backgroundColor: '#f4f6f8',
-    },
-    contentContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 20,
-    },
-    header: {
-        backgroundColor: '#f5f5f5',
-        padding: 20,
-        borderRadius: 10,
-        alignItems: 'center',
-        marginBottom: 40,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-    subtitle: {
-        fontSize: 16,
-        color: '#666',
-        textAlign: 'center',
-        marginTop: 10,
-        opacity: 0.8,
-    },
-    footer: {
-        fontSize: 12,
-        color: '#999',
-        textAlign: 'center',
-        marginTop: 40,
-    },
-});
