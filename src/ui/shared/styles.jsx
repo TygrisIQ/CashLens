@@ -124,4 +124,121 @@ export const styles = StyleSheet.create({
         backgroundColor: '#e0e0e0',
         color: '#000',
     },
+    /* Calendar specific styles */
+    calendarCard: {
+      width: '100%',
+      padding: 16,
+      borderRadius: 12,
+      backgroundColor: '#fff',
+      marginBottom: 20,
+      shadowOpacity: 0.06,
+      shadowRadius: 6,
+    },
+    calendarHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingVertical: 8,
+      paddingHorizontal: 6,
+      marginBottom: 12,
+    },
+    calendarNavButton: {
+      fontSize: 20,
+      padding: 8,
+      color: '#333',
+    },
+    calendarMonthYear: {
+      fontSize: 18,
+      fontWeight: '600',
+      textAlign: 'center',
+    },
+    calendarGrid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
+      width: '100%',
+    },
+    calendarDayEmpty: {
+      width: '14.2857%',
+      aspectRatio: 1,
+      padding: 6,
+      marginBottom: 6,
+    },
+    calendarDay: {
+      width: '14.2857%',
+      aspectRatio: 1,
+      padding: 6,
+      marginBottom: 6,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 6,
+      borderWidth: 1,
+      borderColor: '#eee',
+      backgroundColor: 'transparent',
+    },
+    calendarDaySelected: {
+      backgroundColor: '#0d6efd',
+      borderColor: '#0d6efd',
+    },
+    calendarDayToday: {
+      borderColor: '#198754',
+      borderWidth: 2,
+    },
+    calendarDayNumber: {
+      fontSize: 14,
+      fontWeight: '500',
+    },
+    cashflowIndicator: {
+      marginTop: 6,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    cashflowDot: {
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+    },
+    selectedDateDetails: {
+      marginTop: 14,
+      padding: 12,
+      backgroundColor: '#fff',
+      borderRadius: 8,
+      width: '100%',
+    },
+    selectedDateTitle: {
+      fontSize: 18,
+      fontWeight: '600',
+      marginBottom: 8,
+    },
+    dayStats: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%',
+      paddingVertical: 8,
+    },
+    dayStatItem: {
+      fontSize: 14,
+      color: '#333',
+    },
+    dayTransactions: {
+      marginTop: 8,
+      width: '100%',
+    },
+    dayTransactionsTitle: {
+      fontWeight: '600',
+      marginBottom: 8,
+    },
+    transactionItem: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      borderBottomWidth: 1,
+      borderColor: '#eee',
+      paddingVertical: 8,
+    },
+    transactionDesc: {
+      fontSize: 14,
+      color: '#333',
+    },
+    
 });

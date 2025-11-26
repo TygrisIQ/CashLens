@@ -1,8 +1,10 @@
-
+import { ScrollView } from "react-native";
 
 export default function SettingsScreen(){
 
     return(
-        <ScroolView></ScroolView>
+        <ScrollView>
+            
+        </ScrollView>
     )
 }

@@ -21,6 +21,13 @@ export default function NavBar({ active }) {
                 </Text>
             </TouchableOpacity>
 
+            <TouchableOpacity onPress={() => navigation.navigate("Calendar")}>
+                <Text style={[styles.link, active === "Calendar" && styles.activeLink]}>
+                    Calendar
+                </Text>
+            </TouchableOpacity>
+
+
             <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
                 <Text style={[styles.link, active === "Profile" && styles.activeLink]}>
                     Profile
