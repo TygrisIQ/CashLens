@@ -9,7 +9,7 @@ import ActionButton from '../components/action-button';
 export default function HomeScreen() {
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
             <View style={styles.header}>
                 <Text style={styles.title}>CashLens</Text>
                 <Text style={styles.subtitle}>Track your spending, save smarter and reach your goals!</Text>
@@ -46,8 +46,11 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: {
+    scrollView: {
         flex: 1,
+        backgroundColor: '#f4f6f8',
+    },
+    contentContainer: {
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
@@ -70,5 +73,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 10,
         opacity: 0.8,
+    },
+    footer: {
+        fontSize: 12,
+        color: '#999',
+        textAlign: 'center',
+        marginTop: 40,
     },
 });
