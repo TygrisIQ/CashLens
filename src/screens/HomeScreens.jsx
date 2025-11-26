@@ -1,46 +1,45 @@
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, ScrollView } from 'react-native';
 import NavBar from '../components/nav-bar';
 import ProgressBar from '../components/progress-bar';
 import SummaryCard from '../components/summary-card';
 import ActionButton from '../components/action-button';
-import {styles} from '../ui/shared/styles';
+
+// theme & styles
+import { styles } from '../ui/shared/styles';
+import useTheme from '../ui/shared/themeSelect';
 
 export default function HomeScreen() {
 
-    return (
-        <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
-            <View style={styles.header}>
-                <Text style={styles.title}>CashLens</Text>
-                <Text style={styles.subtitle}>Track your spending, save smarter and reach your goals!</Text>
-            </View>
+  const { theme, themeName, setThemeName } = useTheme();
 
-            <NavBar active="Home" />
+  return (
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
+      
+      
+      <NavBar active="Home" theme={theme} />
 
-            <View>
-                <SummaryCard label="Total Income" value="" color="green" />
-                <SummaryCard label="Total Expenses" value="" color="red" />
-                <SummaryCard label="Savings" value="" color="#0d6efd" />
-            </View>
+      <ScrollView
+        style={[styles.scrollView, { backgroundColor: theme.background }]}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <View style={[styles.header, { backgroundColor: theme.card }]}>
+          <Text style={[styles.title, { color: theme.text }]}>CashLens</Text>
+          <Text style={[styles.subtitle, { color: theme.subtitle }]}>
+            Track your spending, save smarter and reach your goals!
+          </Text>
+        </View>
+        <View style={{ width: "100%" }}>
+          <SummaryCard label="Total Income" value="" color="green" theme={theme} />
+          <SummaryCard label="Total Expenses" value="" color="red" theme={theme} />
+          <SummaryCard label="Savings" value="" color={theme.accent} theme={theme} />
+        </View>
 
-            <View>
-                <Text></Text>
-                <ProgressBar progress={0} />
-                <Text></Text>
-            </View>
+        
+        <Text style={[styles.footer, { color: theme.subtitle }]}>
+          © 2025 CashLens. All rights reserved.
+        </Text>
 
-            <View>
-                <Text></Text>
-                <View>
-                    <ActionButton title="Add Expense" />
-                    <ActionButton title="View Reports" />
-                    <ActionButton title="Set Budget Goals" />
-                    <ActionButton title="Manage Categories" />
-                </View>
-            </View>
-
-            <Text style={styles.footer}>© 2025 CashLens. All rights reserved.</Text>
-
-        </ScrollView>
-    );
+      </ScrollView>
+    </View>
+  );
 }

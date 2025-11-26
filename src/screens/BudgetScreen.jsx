@@ -5,13 +5,15 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-  StyleSheet,
 } from "react-native";
 
 import NavBar from "../components/nav-bar";
+import { styles } from "../ui/shared/styles";
+import useTheme from "../ui/shared/themeSelect";
 
-import {styles} from "../ui/shared/styles";
 export default function BudgetScreen() {
+  const { theme } = useTheme();
+
   const [transactions, setTransactions] = useState([]);
   const [desc, setDesc] = useState("");
   const [amount, setAmount] = useState("");
@@ -34,21 +36,25 @@ export default function BudgetScreen() {
     setTransactions([newTx, ...transactions]);
     setDesc("");
     setAmount("");
-    if (type === "income") {
-      setIncome(income + newTx.amount);
-    } else {
-      setExpenses(expenses + newTx.amount);
-    }
+
+    if (type === "income") setIncome(income + newTx.amount);
+    else setExpenses(expenses + newTx.amount);
   };
 
   return (
-    <View style={styles.container}>
-      <NavBar active="budget" />
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
 
-      <View style={styles.card}>
-        <Text style={styles.heading}>Monthly Budget Overview</Text>
+      {/* NavBar with theme */}
+      <NavBar active="Budget" theme={theme} />
 
-        <Text style={styles.balance}>
+      <View style={[styles.card, { backgroundColor: theme.card }]}>
+
+        {/* Monthly Overview */}
+        <Text style={[styles.heading, { color: theme.accent }]}>
+          Monthly Budget Overview
+        </Text>
+
+        <Text style={[styles.balance, { color: theme.text }]}>
           Total Balance:{" "}
           <Text style={{ color: balance >= 0 ? "green" : "red" }}>
             ${balance.toFixed(2)}
@@ -57,12 +63,17 @@ export default function BudgetScreen() {
 
         <View style={styles.row}>
           <View>
-            <Text style={styles.label}>Income</Text>
-            <Text style={styles.income}>${income.toFixed(2)}</Text>
+            <Text style={[styles.label, { color: theme.subtitle }]}>Income</Text>
+            <Text style={[styles.income, { color: "green" }]}>
+              ${income.toFixed(2)}
+            </Text>
           </View>
+
           <View>
-            <Text style={styles.label}>Expenses</Text>
-            <Text style={styles.expenses}>${expenses.toFixed(2)}</Text>
+            <Text style={[styles.label, { color: theme.subtitle }]}>Expenses</Text>
+            <Text style={[styles.expenses, { color: "red" }]}>
+              ${expenses.toFixed(2)}
+            </Text>
           </View>
         </View>
 
@@ -72,49 +83,107 @@ export default function BudgetScreen() {
             value={desc}
             onChangeText={setDesc}
             placeholder="Description"
-            style={styles.input}
+            placeholderTextColor={theme.subtitle}
+            style={[
+              styles.input,
+              {
+                backgroundColor: theme.card,
+                color: theme.text,
+                borderWidth: 1,
+                borderColor: theme.subtitle,
+              },
+            ]}
           />
+
           <TextInput
             value={amount}
             onChangeText={setAmount}
             placeholder="Amount"
             keyboardType="numeric"
-            style={styles.input}
+            placeholderTextColor={theme.subtitle}
+            style={[
+              styles.input,
+              {
+                backgroundColor: theme.card,
+                color: theme.text,
+                borderWidth: 1,
+                borderColor: theme.subtitle,
+              },
+            ]}
           />
 
           <View style={styles.typeRow}>
             <TouchableOpacity
-              style={[styles.typeButton, type === "income" && styles.activeType]}
+              style={[
+                styles.typeButton,
+                { backgroundColor: theme.card, borderColor: theme.subtitle, borderWidth: 1 },
+                type === "income" && { backgroundColor: theme.accent },
+              ]}
               onPress={() => setType("income")}
             >
-              <Text style={styles.typeText}>Income</Text>
+              <Text
+                style={[
+                  styles.typeText,
+                  { color: type === "income" ? "#fff" : theme.text },
+                ]}
+              >
+                Income
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.typeButton, type === "expense" && styles.activeType]}
+              style={[
+                styles.typeButton,
+                { backgroundColor: theme.card, borderColor: theme.subtitle, borderWidth: 1 },
+                type === "expense" && { backgroundColor: theme.accent },
+              ]}
               onPress={() => setType("expense")}
             >
-              <Text style={styles.typeText}>Expense</Text>
+              <Text
+                style={[
+                  styles.typeText,
+                  { color: type === "expense" ? "#fff" : theme.text },
+                ]}
+              >
+                Expense
+              </Text>
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={styles.addBtn} onPress={addTransaction}>
+          <TouchableOpacity
+            style={[styles.addBtn, { backgroundColor: theme.accent }]}
+            onPress={addTransaction}
+          >
             <Text style={styles.addText}>Add</Text>
           </TouchableOpacity>
         </View>
+        <Text style={[styles.txTitle, { color: theme.text }]}>
+          Recent Transactions
+        </Text>
 
-        {/* Transactions */}
-        <Text style={styles.txTitle}>Recent Transactions</Text>
         {transactions.length === 0 ? (
-          <Text style={styles.empty}>No transactions yet</Text>
+          <Text style={[styles.empty, { color: theme.subtitle }]}>
+            No transactions yet
+          </Text>
         ) : (
           <FlatList
             data={transactions}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-              <View style={styles.txItem}>
-                <Text>{item.desc}</Text>
-                <Text style={{ color: item.type === "income" ? "green" : "red" }}>
+              <View
+                style={[
+                  styles.txItem,
+                  {
+                    borderColor: theme.subtitle,
+                  },
+                ]}
+              >
+                <Text style={{ color: theme.text }}>{item.desc}</Text>
+                <Text
+                  style={{
+                    color: item.type === "income" ? "green" : "red",
+                  }}
+                >
                   {item.type === "income" ? "+" : "-"}${item.amount.toFixed(2)}
                 </Text>
               </View>
@@ -122,8 +191,7 @@ export default function BudgetScreen() {
           />
         )}
       </View>
+
     </View>
   );
 }
-
-
