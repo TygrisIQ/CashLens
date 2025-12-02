@@ -12,6 +12,37 @@ export default function HomeScreen() {
 
   const { theme, themeName, setThemeName } = useTheme();
 
+  // If shared transactions context isn't available yet, fall back to empty array
+  const transactions = [];
+
+  const income = (transactions || [])
+    .filter(tx => tx.type === 'income')
+    .reduce((sum, tx) => sum + (tx.amount || 0), 0);
+
+  const expenses = (transactions || [])
+    .filter(tx => tx.type === 'expense')
+    .reduce((sum, tx) => sum + (tx.amount || 0), 0);
+
+  const handleSubmit = () => {
+    if (!description.trim() || !amount || isNaN(parseFloat(amount))) return;
+
+    const newAmount = parseFloat(amount);
+    const newTransaction = {
+      id: Date.now().toString(),
+      description: description.trim(),
+      amount: newAmount,
+      type,
+    };
+
+    onAddTransaction(newTransaction);
+    setDescription('');
+    setAmount('');
+    setImmediate(new Date().toDateString());
+  };
+
+  const savings = income - expenses;
+  const percentageRemaining = income > 0 ? Math.max(0, Math.min(100, Math.round(((income - expenses) / income) * 100))) : 100;
+
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
       
@@ -29,9 +60,15 @@ export default function HomeScreen() {
           </Text>
         </View>
         <View style={{ width: "100%" }}>
-          <SummaryCard label="Total Income" value="" color="green" theme={theme} />
-          <SummaryCard label="Total Expenses" value="" color="red" theme={theme} />
-          <SummaryCard label="Savings" value="" color={theme.accent} theme={theme} />
+          <SummaryCard label="Total Income" value={`$${income.toFixed(2)}`} color="green" theme={theme} />
+          <SummaryCard label="Total Expenses" value={`$${expenses.toFixed(2)}`} color="red" theme={theme} />
+          <SummaryCard label="Savings" value={`$${savings.toFixed(2)}`} color={theme.accent} theme={theme} />
+        </View>
+        <View>
+          <ProgressBar
+            label="Budget Remaining"
+            percentage={percentageRemaining}
+          />
         </View>
 
         

@@ -1,145 +1,173 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import React, { useState } from "react";
-import { styles } from "../ui/shared/styles";
+import React, { useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { styles } from '../ui/shared/styles';
+import NavBar from '../components/nav-bar';
 
+export default function CalendarScreen({ transactions = [] }) {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
 
-export default function CalendarScreen() {
-    const [currentDate, setCurrentDate] = useState(new Date());
-    const [selectedDate, setSelectedDate] = useState(null);
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
 
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const firstDay = new Date(year, month, 1).getDay();
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'];
 
-    const monthNames = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
+  const getDayCashflow = (day) => {
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const dayTransactions = transactions.filter(t => t.date === dateStr);
+    
+    const income = dayTransactions
+      .filter(t => t.type === 'income')
+      .reduce((sum, t) => sum + t.amount, 0);
+    
+    const expenses = dayTransactions
+      .filter(t => t.type === 'expense')
+      .reduce((sum, t) => sum + t.amount, 0);
+    
+    return { income, expenses, net: income - expenses, transactions: dayTransactions };
+  };
 
-    const getDayCashFlow = (day) => {
-        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const dailyTransactions = transactions.filter(tx => tx.date === dateStr);
+  const goToPreviousMonth = () => {
+    setCurrentDate(new Date(year, month - 1, 1));
+    setSelectedDate(null);
+  };
 
-        const income = dailyTransactions
-            .filter(tx => tx.type === 'income')
-            .reduce((sum, tx) => sum + tx.amount, 0);
-        const expenses = dailyTransactions
-            .filter(tx => tx.type === 'expense')
-            .reduce((sum, tx) => sum + tx.amount, 0);
+  const goToNextMonth = () => {
+    setCurrentDate(new Date(year, month + 1, 1));
+    setSelectedDate(null);
+  };
 
-        return { income, expenses, net: income - expenses, transactions: dailyTransactions};
-    };
+  const handleDayClick = (day) => {
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    setSelectedDate(dateStr);
+  };
 
-    const goToPreviousMonth = () => {
-        setCurrentDate(new Date(year, month - 1, 1));
-        setSelectedDate(null);
-    };
-
-    const goToNextMonth = () => {
-        setCurrentDate(new Date(year, month + 1, 1));
-        setSelectedDate(null);
-    };
-
-    const handleDateSelect = (day) => {
-        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        setSelectedDate(dateStr);
-    };
-
-    const renderCalendar = () => {
-        const calendarDays = [];  
-        
-        for (let i = 0; i < firstDay; i++) {
-            calendarDays.push(<View key={`empty-${i}`} style={styles.calendarDayEmpty} />);
-        }
-
-        for (let day = 1; day <= daysInMonth; day++) {
-            const cashflow = getDayCashFlow(day);
-            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const isToday = new Date().toDateString() === new Date(year, month, day).toDateString();
-            const isSelected = selectedDate === dateStr;
-
-            calendarDays.push(
-                <TouchableOpacity
-                    key={day}
-                    style={{
-                        ...styles.calendarDay,
-                        ...(isSelected ? styles.calendarDaySelected : {}),
-                        ...(isToday ? styles.calendarDayToday : {}),
-                        cursor: 'pointer',
-                    }}
-                    onPress={() => handleDateSelect(day)}
-                >
-                    <Text style={styles.calendarDayNumber}>{day}</Text>
-                    {cashflow.transactions.length > 0 && (
-                        <View style={styles.cashflowIndicator}>
-                            <View style={{ ...styles.cashflowDot, backgroundColor: cashflow.net >= 0 ? "green" : "red" }} />
-                        </View>
-                    )}
-                </TouchableOpacity>
-            )
-        }
-
-        return calendarDays;
-    };
-
-    const selectedDateData = selectedDate ? (() => {
-        const day = parseInt(selectedDate.split('-')[2], 10);
-        return getDayCashFlow(day);
-    })() : null;
-
-    return (
-        <ScrollView style={styles.container}>
-            <View style={styles.calendarCard}>
-                <View style={styles.calendarHeader}>
-                    <TouchableOpacity onPress={goToPreviousMonth}>
-                        <Text style={styles.calendarNavButton}>{"<"}</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.calendarMonthYear}>{`${monthNames[month]} ${year}`}</Text>
-                    <TouchableOpacity onPress={goToNextMonth}>
-                        <Text style={styles.calendarNavButton}>{">"}</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.calendarGrid}>
-                    {renderCalendar()}
-                </View>
-
-                
-                {selectedDate && selectedDateData && (
-                    <View style={styles.selectedDateDetails}>
-                        <Text style={styles.selectedDateTitle}>
-                            {new Date(selectedDate).toLocaleDateString('en-US', {   month: 'long',
-                                day: 'numeric',
-                                year: 'numeric' 
-                                })}
-                        </Text>
-
-                        <View style={styles.dayStats}>
-                            <Text style={styles.dayStatItem}>Income: ${selectedDateData.income.toFixed(2)}</Text>
-                            <Text style={styles.dayStatItem}>Expenses: ${selectedDateData.expenses.toFixed(2)}</Text>
-                            <Text style={styles.dayStatItem}>Net: ${selectedDateData.net.toFixed(2)}</Text>
-                        </View>
-
-                        {selectedDateData.transactions.length > 0 && (
-                            <View style={styles.dayTransactions}>
-                                <Text style={styles.dayTransactionsTitle}>Transactions:</Text>
-                                {selectedDateData.transactions.map((tx, index) => (
-                                    <View key={index} style={styles.transactionItem}>
-                                        <Text style={styles.transactionDesc}>{tx.description}</Text>
-                                        <Text style={{
-                                            color: tx.type === 'income' ? 'green' : 'red'
-                                        }}>
-                                            ${tx.amount.toFixed(2)}
-                                        </Text>
-                                    </View>
-                                ))}
-                            </View>
-                        )}
-                    </View>
-                )}
+  const renderCalendarDays = () => {
+    const days = [];
+    
+    for (let i = 0; i < firstDay; i++) {
+      days.push(<View key={`empty-${i}`} style={styles.calendarDay} />);
+    }
+    
+    for (let day = 1; day <= daysInMonth; day++) {
+      const cashflow = getDayCashflow(day);
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const isSelected = selectedDate === dateStr;
+      const isToday = new Date().toISOString().split('T')[0] === dateStr;
+      
+      days.push(
+        <TouchableOpacity
+          key={day}
+          style={[
+            styles.calendarDay,
+            isSelected && styles.calendarDaySelected,
+            isToday && styles.calendarDayToday
+          ]}
+          onPress={() => handleDayClick(day)}
+        >
+          <Text style={styles.dayNumber}>{day}</Text>
+          {cashflow.transactions.length > 0 && (
+            <View style={styles.cashflowIndicator}>
+              <View style={[
+                styles.cashflowDot,
+                { backgroundColor: cashflow.net >= 0 ? '#198754' : '#dc3545' }
+              ]} />
             </View>
-        </ScrollView>
-    );
-}
+          )}
+        </TouchableOpacity>
+      );
+    }
+    
+    return days;
+  };
+
+  const selectedDateData = selectedDate ? (() => {
+    const day = parseInt(selectedDate.split('-')[2]);
+    return getDayCashflow(day);
+  })() : null;
+
+  return (
+    <ScrollView style={styles.mainContainer}>
+        <NavBar active="Calendar" />
+      <View style={styles.calendarCard}>
+        <View style={styles.calendarHeader}>
+          <TouchableOpacity style={styles.monthNavButton} onPress={goToPreviousMonth}>
+            <Text style={styles.monthNavText}>‹</Text>
+          </TouchableOpacity>
+          <Text style={styles.monthTitle}>{monthNames[month]} {year}</Text>
+          <TouchableOpacity style={styles.monthNavButton} onPress={goToNextMonth}>
+            <Text style={styles.monthNavText}>›</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.weekdaysRow}>
+          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+            <Text key={day} style={styles.weekday}>{day}</Text>
+          ))}
+        </View>
+
+        <View style={styles.calendarGrid}>
+          {renderCalendarDays()}
+        </View>
+
+        {selectedDate && selectedDateData && (
+          <View style={styles.dayDetails}>
+            <Text style={styles.dayDetailsTitle}>
+              {new Date(selectedDate).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </Text>
+            
+            <View style={styles.dayStats}>
+              <View style={styles.dayStatItem}>
+                <Text style={styles.dayStatLabel}>Income:</Text>
+                <Text style={[styles.dayStatValue, styles.successText]}>
+                  +${selectedDateData.income.toFixed(2)}
+                </Text>
+              </View>
+              <View style={styles.dayStatItem}>
+                <Text style={styles.dayStatLabel}>Expenses:</Text>
+                <Text style={[styles.dayStatValue, styles.dangerText]}>
+                  -${selectedDateData.expenses.toFixed(2)}
+                </Text>
+              </View>
+              <View style={styles.dayStatItem}>
+                <Text style={styles.dayStatLabel}>Net:</Text>
+                <Text style={[
+                  styles.dayStatValue,
+                  { color: selectedDateData.net >= 0 ? '#198754' : '#dc3545', fontWeight: 'bold' }
+                ]}>
+                  ${selectedDateData.net.toFixed(2)}
+                </Text>
+              </View>
+            </View>
+
+            {selectedDateData.transactions.length > 0 && (
+              <View style={styles.dayTransactions}>
+                <Text style={styles.dayTransactionsTitle}>Transactions</Text>
+                {selectedDateData.transactions.map(t => (
+                  <View key={t.id} style={styles.dayTransaction}>
+                    <Text>{t.description}</Text>
+                    <Text style={{
+                      color: t.type === 'income' ? '#198754' : '#dc3545',
+                      fontWeight: 'bold'
+                    }}>
+                      {t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
+          </View>
+        )}
+      </View>
+    </ScrollView>
+  );
+};

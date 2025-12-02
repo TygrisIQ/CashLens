@@ -240,5 +240,35 @@ export const styles = StyleSheet.create({
       fontSize: 14,
       color: '#333',
     },
+    weekdaysRow: {
+      flexDirection: 'row',
+      width: '100%',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      marginBottom: 6,
+    },
+    weekday: {
+      width: '14.2857%',
+      textAlign: 'center',
+      fontWeight: '600',
+      color: '#555',
+      paddingVertical: 6,
+    },
+    /* alias for CalendarScreen usages */
+    dayNumber: {
+      fontSize: 14,
+      fontWeight: '500',
+      textAlign: 'center',
+    },
+    monthNavButton: {
+      fontSize: 20,
+      padding: 8,
+      color: '#333',
+    },
+    monthTitle: {
+      fontSize: 18,
+      fontWeight: '600',
+      textAlign: 'center',
+    },
     
 });
