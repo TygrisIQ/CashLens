@@ -270,5 +270,13 @@ export const styles = StyleSheet.create({
       fontWeight: '600',
       textAlign: 'center',
     },
-    
+    monthNavText: {
+      fontSize: 20,
+      padding: 8,
+      color: '#333',
+    },
+    monthTitle: {
+      fontSize: 18,
+      fontWeight: '600',
+    },
 });
