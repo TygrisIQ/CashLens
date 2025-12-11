@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   View,
   Text,
@@ -14,16 +15,37 @@ import useTheme from "../ui/shared/themeSelect";
 export default function BudgetScreen() {
   const { theme } = useTheme();
 
+  // Load transactions from AsyncStorage on mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const savedData = await AsyncStorage.getItem("transactions");
+        if (savedData) {
+          setTransactions(JSON.parse(savedData));
+        }
+      } catch (error) {
+        console.log("Error loading data:", error);
+      }
+    };
+    loadData();
+  }, []);
+
   const [transactions, setTransactions] = useState([]);
   const [desc, setDesc] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("income");
-  const [income, setIncome] = useState(0);
-  const [expenses, setExpenses] = useState(0);
+  const income = transactions
+    .filter((t) => t.type === "income")
+    .reduce((acc, curr) => acc + curr.amount, 0);
+
+  const expenses = transactions
+    .filter((t) => t.type === "expense")
+    .reduce((acc, curr) => acc + curr.amount, 0);
 
   const balance = income - expenses;
 
-  const addTransaction = () => {
+  // Function to add a new transaction
+  const addTransaction = async () => {
     if (!desc || !amount) return;
 
     const newTx = {
@@ -31,14 +53,38 @@ export default function BudgetScreen() {
       desc,
       amount: parseFloat(amount),
       type,
+      date: new Date().toISOString().split('T')[0]
     };
+    
+    // create array with new transaction at the front
+    const updatedTransactions = [newTx, ...transactions];
 
-    setTransactions([newTx, ...transactions]);
+    setTransactions(updatedTransactions);
+     
+    try {
+      await AsyncStorage.setItem("transactions", JSON.stringify(updatedTransactions));
+    } catch (error) {
+      console.log("Error saving data:", error);
+    }
+
     setDesc("");
     setAmount("");
+  };
 
-    if (type === "income") setIncome(income + newTx.amount);
-    else setExpenses(expenses + newTx.amount);
+  // Delete transaction function 
+
+  const deleteTransaction = async (id) => {
+    const updatedTransactions = transactions.filter((t) => t.id !== id);
+
+    //Update the UI 
+    setTransactions(updatedTransactions);
+
+    //Update Local Storage
+    try {
+      await AsyncStorage.setItem("transactions", JSON.stringify(updatedTransactions));
+    } catch (error) {
+      console.log("Error deleting item:", error);
+    }
   };
 
   return (
@@ -175,18 +221,31 @@ export default function BudgetScreen() {
                   styles.txItem,
                   {
                     borderColor: theme.subtitle,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   },
                 ]}
-              >
-                <Text style={{ color: theme.text }}>{item.desc}</Text>
+              >                  
+                            {/* Delete transaction */}
+                  <Text style={{ color: theme.text, flex: 1 }}>{item.desc}</Text>
+                  <View style ={{ flexDirection: "row", alignItems: "center"}}>
                 <Text
                   style={{
                     color: item.type === "income" ? "green" : "red",
+                    marginRight: 15,
+                    fontWeight: "bold",
                   }}
                 >
                   {item.type === "income" ? "+" : "-"}${item.amount.toFixed(2)}
                 </Text>
+                <TouchableOpacity onPress={() => deleteTransaction(item.id)}>
+                  <Text style={{ color: "red", fontWeight: "bold" }}> 
+                    X 
+                  </Text>
+                </TouchableOpacity>
               </View>
+            </View>
             )}
           />
         )}

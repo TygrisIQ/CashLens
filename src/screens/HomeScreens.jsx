@@ -3,6 +3,8 @@ import NavBar from '../components/nav-bar';
 import ProgressBar from '../components/progress-bar';
 import SummaryCard from '../components/summary-card';
 import ActionButton from '../components/action-button';
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // theme & styles
 import { styles } from '../ui/shared/styles';
@@ -12,8 +14,21 @@ export default function HomeScreen() {
 
   const { theme, themeName, setThemeName } = useTheme();
 
-  // If shared transactions context isn't available yet, fall back to empty array
-  const transactions = [];
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+      const loadData = async () => {
+        try {
+          const savedData = await AsyncStorage.getItem("transactions");
+          if (savedData) {
+            setTransactions(JSON.parse(savedData));
+          }
+        } catch (error) {
+          console.error("Failed to load data:", error);
+        }
+      };
+      loadData();
+  }, []);
 
   const income = (transactions || [])
     .filter(tx => tx.type === 'income')
@@ -59,10 +74,36 @@ export default function HomeScreen() {
             Track your spending, save smarter and reach your goals!
           </Text>
         </View>
-        <View style={{ width: "100%" }}>
-          <SummaryCard label="Total Income" value={`$${income.toFixed(2)}`} color="green" theme={theme} />
-          <SummaryCard label="Total Expenses" value={`$${expenses.toFixed(2)}`} color="red" theme={theme} />
-          <SummaryCard label="Savings" value={`$${savings.toFixed(2)}`} color={theme.accent} theme={theme} />
+
+        <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 30 }}>  
+          <View style={{ marginBottom: 15 }}>
+             <SummaryCard 
+                label="Current Savings" 
+                value={`$${savings.toFixed(2)}`} 
+                color={theme.accent} 
+                theme={theme} 
+             />
+          </View>
+
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={{ width: '48%' }}>
+               <SummaryCard 
+                  label="Income" 
+                  value={`$${income.toFixed(2)}`} 
+                  color="green" 
+                  theme={theme} 
+               />
+            </View>
+            <View style={{ width: '48%' }}>
+               <SummaryCard 
+                  label="Expenses" 
+                  value={`$${expenses.toFixed(2)}`} 
+                  color="red" 
+                  theme={theme} 
+               />
+            </View>
+            
+          </View>
         </View>
         <View>
           <ProgressBar

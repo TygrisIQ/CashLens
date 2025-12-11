@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { styles } from '../ui/shared/styles';
 import NavBar from '../components/nav-bar';
 
-export default function CalendarScreen({ transactions = [] }) {
+export default function CalendarScreen() {
+  const [transactions, setTransactions] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
+
+  // Load transactions from AsyncStorage on mount
+  useEffect(() => {
+    const loadData = async () => { 
+      try {
+        const savedData = await AsyncStorage.getItem("transactions");
+        if (savedData) {
+          setTransactions(JSON.parse(savedData));
+        }
+      } catch (error) {
+        console.log("Error loading data:", error);
+      }
+    };
+    loadData();
+  }, []);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -154,7 +171,7 @@ export default function CalendarScreen({ transactions = [] }) {
                 <Text style={styles.dayTransactionsTitle}>Transactions</Text>
                 {selectedDateData.transactions.map(t => (
                   <View key={t.id} style={styles.dayTransaction}>
-                    <Text>{t.description}</Text>
+                    <Text>{t.dayTransaction}</Text>
                     <Text style={{
                       color: t.type === 'income' ? '#198754' : '#dc3545',
                       fontWeight: 'bold'
