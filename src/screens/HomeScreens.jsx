@@ -105,9 +105,9 @@ export default function HomeScreen() {
             
           </View>
         </View>
-        <View>
+        <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 30 }}>
           <ProgressBar
-            label="Budget Remaining"
+            label="Savings Remaining"
             percentage={percentageRemaining}
           />
         </View>
