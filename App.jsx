@@ -3,11 +3,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import HomeScreen from './src/screens/HomeScreens';
-import BudgetScreen from './src/screens/BudgetScreen';
-import ProfileScreen from './src/screens/ProfileScreen';
-import SettingsScreen from './src/screens/SettingsScreen';
-import CalendarScreen from './src/screens/CalendarScreen';
+import HomeScreen from './src/ui/screens/HomeScreens';
+import BudgetScreen from './src/ui/screens/BudgetScreen';
+import ProfileScreen from './src/ui/screens/ProfileScreen';
+import SettingsScreen from './src/ui/screens/SettingsScreen';
+import CalendarScreen from './src/ui/screens/CalendarScreen';
 
 import { styles } from './src/ui/shared/styles';
 

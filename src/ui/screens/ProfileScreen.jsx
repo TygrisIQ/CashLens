@@ -1,8 +1,9 @@
 import { ScrollView, View, Text, Image } from "react-native";
-import { styles } from "../ui/shared/styles";
+import { styles } from "../shared/styles";
 import NavBar from "../components/nav-bar";
-import useTheme from "../ui/shared/themeSelect";
-
+import useTheme from "../shared/themeSelect";
+import { ClearTransactionData } from "../../data/DataController";
+import { Button } from "react-native";
 export default function ProfileScreen() {
 
     const defaultAvatar = require("../assets/profile_placeholder.png");
@@ -65,12 +66,16 @@ export default function ProfileScreen() {
                     </View>
                 </View>
 
+                <Button 
+                title="Delete All Transactions"
+                onPress={ClearTransactionData}
+                />
                 <Text style={[styles.footer, { color: theme.subtitle }]}>
                     © 2025 CashLens. All rights reserved.
                 </Text>
 
             </ScrollView>
-
+        
         </View>
     );
 }

@@ -31,3 +31,9 @@ export const deleteTransaction = async (id) => {
     await saveTransactions(updated);
     return updated;
 }
+
+
+//erase all transaction data
+export const ClearTransactionData = async () => {
+    AsyncStorage.removeItem(KEY);
+}
