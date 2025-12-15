@@ -16,76 +16,36 @@ export default function BudgetScreen() {
   const { theme } = useTheme();
 
   // Load transactions from AsyncStorage on mount
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const savedData = await AsyncStorage.getItem("transactions");
-        if (savedData) {
-          setTransactions(JSON.parse(savedData));
-        }
-      } catch (error) {
-        console.log("Error loading data:", error);
-      }
-    };
-    loadData();
-  }, []);
+ useEffect(() => {
+  loadTransactions().then(setTransactions);
+}, []);
 
-  const [transactions, setTransactions] = useState([]);
-  const [desc, setDesc] = useState("");
-  const [amount, setAmount] = useState("");
-  const [type, setType] = useState("income");
-  const income = transactions
-    .filter((t) => t.type === "income")
-    .reduce((acc, curr) => acc + curr.amount, 0);
+const handleAdd = async () => {
+  if (!desc || !amount) return;
 
-  const expenses = transactions
-    .filter((t) => t.type === "expense")
-    .reduce((acc, curr) => acc + curr.amount, 0);
-
-  const balance = income - expenses;
-
-  // Function to add a new transaction
-  const addTransaction = async () => {
-    if (!desc || !amount) return;
-
-    const newTx = {
-      id: Date.now().toString(),
-      desc,
-      amount: parseFloat(amount),
-      type,
-      date: new Date().toISOString().split('T')[0]
-    };
-    
-    // create array with new transaction at the front
-    const updatedTransactions = [newTx, ...transactions];
-
-    setTransactions(updatedTransactions);
-     
-    try {
-      await AsyncStorage.setItem("transactions", JSON.stringify(updatedTransactions));
-    } catch (error) {
-      console.log("Error saving data:", error);
-    }
-
-    setDesc("");
-    setAmount("");
+  const newTx = {
+    id: Date.now().toString(),
+    desc,
+    amount: parseFloat(amount),
+    type,
+    date: new Date().toISOString().split('T')[0],
   };
+
+  const updated = await addTransaction(newTx);
+  setTransactions(updated);
+
+  setDesc('');
+  setAmount('');
+};
+
 
   // Delete transaction function 
 
-  const deleteTransaction = async (id) => {
-    const updatedTransactions = transactions.filter((t) => t.id !== id);
+  const handleDelete = async (id) => {
+  const updated = await deleteTransaction(id);
+  setTransactions(updated);
+};
 
-    //Update the UI 
-    setTransactions(updatedTransactions);
-
-    //Update Local Storage
-    try {
-      await AsyncStorage.setItem("transactions", JSON.stringify(updatedTransactions));
-    } catch (error) {
-      console.log("Error deleting item:", error);
-    }
-  };
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>

@@ -12,3 +12,22 @@ export const loadTransactions = async() => {
 export const saveTransactions = async(transactions) =>{
     await AsyncStorage.setItem(KEY, JSON.stringify(transactions));
 }
+
+
+export const addTransaction = async (newTr) => {
+    //load existing transactions
+    const existing = await loadTransactions();
+    //add updated to the existing transations
+    const updated = [newTr, ...existing];
+    //save 
+    await saveTransactions(updated);
+    //return updated transactions
+    return updated;
+}
+
+export const deleteTransaction = async (id) => {
+    const existing = await loadTransactions();
+    const updated = existing.filter(tr => tr.id !== id);
+    await saveTransactions(updated);
+    return updated;
+}
