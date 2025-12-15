@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import NavBar from '../components/nav-bar';
 import { styles } from '../shared/styles';
 export default function CalendarScreen() {
   const [transactions, setTransactions] = useState([]);
@@ -108,7 +107,6 @@ export default function CalendarScreen() {
 
   return (
     <ScrollView style={styles.mainContainer}>
-        <NavBar active="Calendar" />
       <View style={styles.calendarCard}>
         <View style={styles.calendarHeader}>
           <TouchableOpacity style={styles.monthNavButton} onPress={goToPreviousMonth}>

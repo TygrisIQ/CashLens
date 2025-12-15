@@ -1,6 +1,5 @@
 import { ScrollView, View, Text, Image } from "react-native";
 import { styles } from "../shared/styles";
-import NavBar from "../components/nav-bar";
 import useTheme from "../shared/themeSelect";
 import { ClearTransactionData } from "../../data/DataController";
 import { Button } from "react-native";
@@ -13,7 +12,6 @@ export default function ProfileScreen() {
         <View style={{ flex: 1, backgroundColor: theme.background }}>
             
            
-            <NavBar active="Profile" theme={theme} />
 
             <ScrollView
                 style={[styles.scrollView, { backgroundColor: theme.background }]}

@@ -7,7 +7,6 @@ import {
   FlatList,
 } from 'react-native';
 
-import NavBar from '../components/nav-bar';
 import { styles } from '../shared/styles';
 import useTheme from '../shared/themeSelect';
 import {
@@ -202,7 +201,6 @@ export default function BudgetScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
-      <NavBar active="Budget" theme={theme} />
 
       <View style={[styles.card, { backgroundColor: theme.card }]}>
         <Text style={[styles.heading, { color: theme.accent }]}>

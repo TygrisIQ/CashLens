@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 
-import NavBar from '../components/nav-bar';
 import ProgressBar from '../components/progress-bar';
 import SummaryCard from '../components/summary-card';
 
@@ -42,7 +41,7 @@ export default function HomeScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
-      <NavBar active="Home" theme={theme} />
+      
 
       <ScrollView
         style={[styles.scrollView, { backgroundColor: theme.background }]}
