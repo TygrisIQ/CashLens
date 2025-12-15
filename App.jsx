@@ -22,6 +22,8 @@ function App() {
     subtitle: useColorScheme() === 'dark' ? '#AAAAAA' : '#555555',
     accent: useColorScheme() === 'dark' ? '#BB86FC' : '#6200EE',
   };
+
+
   const themeName = useColorScheme() === 'dark' ? 'dark' : 'light';
   
 

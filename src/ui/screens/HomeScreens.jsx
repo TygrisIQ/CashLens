@@ -15,7 +15,7 @@ export default function HomeScreen() {
   const { theme, themeName, setThemeName } = useTheme();
 
   const [transactions, setTransactions] = useState([]);
-
+ //load data
   useEffect(() => {
       const loadData = async () => {
         try {
@@ -68,13 +68,17 @@ export default function HomeScreen() {
         style={[styles.scrollView, { backgroundColor: theme.background }]}
         contentContainerStyle={styles.contentContainer}
       >
-        <View style={[styles.header, { backgroundColor: theme.card }]}>
+        <View style={[styles.header, {width: "100%", paddingHorizontal: 20, 
+
+        }
+          ,{ backgroundColor: theme.card }]}>
           <Text style={[styles.title, { color: theme.text }]}>CashLens</Text>
           <Text style={[styles.subtitle, { color: theme.subtitle }]}>
-            Track your spending, save smarter and reach your goals!
+            Track your spending!
           </Text>
         </View>
-
+        
+        
         <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 30 }}>  
           <View style={{ marginBottom: 15 }}>
              <SummaryCard 
@@ -102,9 +106,10 @@ export default function HomeScreen() {
                   theme={theme} 
                />
             </View>
-            
           </View>
-        </View>
+        </View>        
+
+        
         <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 30 }}>
           <ProgressBar
             label="Savings Remaining"
