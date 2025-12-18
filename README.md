@@ -9,3 +9,5 @@
 - completely offline, async-storage, build in react-native
 
 
+![HomePage](sc1.png)
+![BudgetPage](sc2.png)
