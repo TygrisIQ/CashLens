@@ -1,13 +1,53 @@
 import { ScrollView, View, Text, Image } from "react-native";
 import { styles } from "../shared/styles";
 import useTheme from "../shared/themeSelect";
-import { ClearTransactionData } from "../../data/DataController";
+import { ClearTransactionData,loadTransactions } from "../../data/DataController";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+
+
+
+
 export default function ProfileScreen() {
 
     const defaultAvatar = require("../assets/profile_placeholder.png");
     const { theme } = useTheme();
 
+
+    const [Transactions, SetTransactions] = useState([]);
+    const reloadTransactions = async () => {
+        const data = await loadTransactions();
+        SetTransactions(data);
+    };
+    useFocusEffect(() => {
+        reloadTransactions();
+    });
+      
+     
+    const handleClear = async () => {
+        await ClearTransactionData();
+        await reloadTransactions();
+    };
+
+   const { income, expenses, balance } = useMemo(() => {
+    const income = Transactions
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0);
+
+    const expenses = Transactions
+        .filter(t => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0);
+
+    return {
+        income,
+        expenses,
+        balance: income - expenses,
+    };
+}, [Transactions]);
+
+   
     return (
         <View style={{ flex: 1, backgroundColor: theme.background }}>
             
@@ -43,7 +83,9 @@ export default function ProfileScreen() {
                         borderRadius: 10,
                         marginBottom: 15
                     }}>
-                        <Text style={{ color: theme.text }}>Total Income: $0</Text>
+                        <Text style={{ color: theme.text }}>Total Income: ${income.toFixed(2)} {
+                            
+                            }</Text>
                     </View>
 
                     <View style={{
@@ -52,7 +94,7 @@ export default function ProfileScreen() {
                         borderRadius: 10,
                         marginBottom: 15
                     }}>
-                        <Text style={{ color: theme.text }}>Total Expenses: $0</Text>
+                        <Text style={{ color: theme.text }}>Total Expenses: ${expenses.toFixed(2)}</Text>
                     </View>
 
                     <View style={{
@@ -60,14 +102,16 @@ export default function ProfileScreen() {
                         padding: 15,
                         borderRadius: 10
                     }}>
-                        <Text style={{ color: theme.text }}>Savings: $0</Text>
+                        <Text style={{ color: theme.text }}>Savings: ${(income - expenses).toFixed(2)}</Text>
                     </View>
                 </View>
-
-                <Button 
-                title="Delete All Transactions"
-                onPress={ClearTransactionData}
-                />
+                
+               <TouchableOpacity
+                       style={[styles.addBtn, { backgroundColor: theme.accent }]}
+                       onPress={handleClear}
+                     >
+                       <Text style={styles.addText}>Delete All Transactions</Text>
+                     </TouchableOpacity>
                 <Text style={[styles.footer, { color: theme.subtitle }]}>
                     © 2025 CashLens. All rights reserved.
                 </Text>

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import { styles } from '../shared/styles';
+import { useFocusEffect } from '@react-navigation/native';
 import useTheme from '../shared/themeSelect';
 import {
   loadTransactions,
@@ -159,10 +160,11 @@ export default function BudgetScreen() {
   const [amount, setAmount] = useState('');
   const [type, setType] = useState('income');
 
-  useEffect(() => {
+  useFocusEffect(
+   React.useCallback(() => {
     loadTransactions().then(setTransactions);
-  }, []);
-
+  }, [])
+);
   const { income, expenses, balance } = useMemo(() => {
     const income = transactions
       .filter(t => t.type === 'income')
