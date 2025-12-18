@@ -2,7 +2,7 @@ import { StatusBar, useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import BottomTabs from './src/ui/components/BottomTabs';
+import BottomTabs from './src/ui/navigation/BottomTabs';
 export default function App() {
   const scheme = useColorScheme();
 

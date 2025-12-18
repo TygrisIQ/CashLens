@@ -129,7 +129,7 @@ export default function HomeScreen() {
           >
             {percentageRemaining > 20
               ? "You're doing great! Keep it up."
-              : "Warning: You've spent most of your income."}
+              : "Warning: You are spending more than your income"}
           </Text>
         </View>
 
