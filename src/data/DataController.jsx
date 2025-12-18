@@ -1,7 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const KEY = 'transactions';
+const PROFILE_KEY = 'profile';
 
+
+export const loadProfile = async () => {
+    const data = await AsyncStorage.getItem(PROFILE_KEY);
+    return data ? JSON.parse(data) :
+    {firstName: '', lastName: '', avatarUri: null};
+}
+
+export const saveProfile = async (profile) =>{
+    await AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(profile));    
+}
 
 //load data if exists,empty array otherwise
 export const loadTransactions = async() => {
